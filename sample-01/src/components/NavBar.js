@@ -37,20 +37,40 @@ const NavBar = () => {
         }
     });    
 
-    const [hasData, setHasData] = useState(false);
+  const [hasData, setHasData] = useState(false);
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/get-user-info?email='+user.email);
-        const data = await response.json();
-        setHasData(data != null);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setHasData(false); // Handle error case
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/get-user-info?email='+user.email);
+      const data = await response.json();
+      setHasData(data != null);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setHasData(false); // Handle error case
+    }
+  };
+
+  // Nouvelle méthode pour supprimer les données utilisateur
+  const deleteUserData = async () => {
+    try {
+      const response = await fetch(`http://localhost:3001/delete-user-data?email=${user.email}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        // Déconnexion après suppression des données
+        logoutWithRedirect();
+        alert('Vos données ont été supprimées avec succès.');
+      } else {
+        alert('Erreur lors de la suppression des données.');
       }
-    };
+    } catch (error) {
+      console.error("Erreur lors de la suppression des données:", error);
+      alert('Une erreur est survenue.');
+    }
+  };
   
-      // Trigger user save on authentication
+  // Trigger user save on authentication
   if (isAuthenticated) {
     console.log(user.email)
     fetchData();
@@ -75,17 +95,17 @@ const NavBar = () => {
                 </NavLink>
               </NavItem>
               {isAuthenticated && (
-  <NavItem>
-    <NavLink
-      tag={RouterNavLink}
-      to="/prescriptions"
-      exact
-      activeClassName="router-link-exact-active"
-    >
-      Prescriptions
-    </NavLink>
-  </NavItem>
-)}
+                <NavItem>
+                  <NavLink
+                    tag={RouterNavLink}
+                    to="/prescriptions"
+                    exact
+                    activeClassName="router-link-exact-active"
+                  >
+                    Prescriptions
+                  </NavLink>
+                </NavItem>
+              )}
 
               {isAuthenticated && (
                 <NavItem>
@@ -145,6 +165,16 @@ const NavBar = () => {
                       activeClassName="router-link-exact-active"
                     >
                       <FontAwesomeIcon icon="user" className="mr-3" /> Profile
+                    </DropdownItem>
+                    <DropdownItem
+                      id="qsDeleteDataBtn"
+                      onClick={() => {
+                        if (window.confirm('Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.')) {
+                          deleteUserData();
+                        }
+                      }}
+                    >
+                      <FontAwesomeIcon icon="trash" className="mr-3" /> Supprimer mes données
                     </DropdownItem>
                     <DropdownItem
                       id="qsLogoutBtn"

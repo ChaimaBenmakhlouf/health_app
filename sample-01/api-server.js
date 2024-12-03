@@ -272,4 +272,42 @@ app.delete('/delete-prescription/:id', (req, res) => {
   });
 });
 
+
+app.delete('/delete-user-data', (req, res) => {
+  const { email } = req.query;
+
+  if (!email) {
+    return res.status(400).send('Email query parameter is required');
+  }
+
+  // Remove user infos
+  const deleteUserInfoQuery = 'DELETE FROM user_info WHERE email = ?';
+  
+  // remove user's prescriptions
+  const deletePrescriptionsQuery = 'DELETE FROM prescriptions WHERE user_email = ?';
+
+  // Execute deletion
+  db.query(deleteUserInfoQuery, [email], (err1, result1) => {
+    if (err1) {
+      console.error(err1);
+      return res.status(500).send('Error deleting user info');
+    }
+
+    db.query(deletePrescriptionsQuery, [email], (err2, result2) => {
+      if (err2) {
+        console.error(err2);
+        return res.status(500).send('Error deleting user prescriptions');
+      }
+
+      res.json({ 
+        message: 'User data deleted successfully',
+        userInfoDeleted: result1.affectedRows,
+        prescriptionsDeleted: result2.affectedRows
+      });
+    });
+  });
+});
+
+
+
 app.listen(port, () => console.log(`API Server listening on port ${port}`));
