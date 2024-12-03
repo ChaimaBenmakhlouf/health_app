@@ -13,6 +13,7 @@ import ExternalApi from "./views/ExternalApi";
 import Forms from "./views/Forms";
 import { useAuth0 } from "@auth0/auth0-react";
 import history from "./utils/history";
+// import UserSettings from "./components/UserSettings";
 
 // styles
 import "./App.css";
@@ -45,6 +46,7 @@ const App = () => {
             <Route path="/prescriptions" element={<PrescriptionView />} />
             <Route path="/prescription/new" element={<PrescriptionForm />} />
             <Route path="/prescription/edit/:id" element={<PrescriptionForm />} />
+            {/* <Route path="/settings" element={<UserSettings />} /> */}
           </Routes>
         </Container>
         <Footer />
