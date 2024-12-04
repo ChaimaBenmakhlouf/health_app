@@ -14,7 +14,7 @@ const PrescriptionForm = () => {
     dosage_duration_value: "",
     dosage_duration_unit: "jours",
     start_date: "",
-    end_date: "", 
+    end_date: "",
     notes: "",
   });
 
@@ -22,16 +22,9 @@ const PrescriptionForm = () => {
 
   useEffect(() => {
     if (id) {
-      console.log("Fetching prescription for ID:", id);
       fetch(`http://localhost:3001/get-prescription/${id}`)
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error("Erreur lors de la récupération des données");
-          }
-          return res.json();
-        })
+        .then((res) => res.json())
         .then((data) => {
-          console.log("Données récupérées :", data);
           const [durationValue, durationUnit] = data.dosage_duration.split(" ");
           setFormData({
             medication_name: data.medication_name,
@@ -39,8 +32,8 @@ const PrescriptionForm = () => {
             dosage_frequency: data.dosage_frequency,
             dosage_duration_value: durationValue,
             dosage_duration_unit: durationUnit,
-            start_date: data.start_date ? data.start_date.slice(0, 10) : "",
-            end_date: data.end_date ? data.end_date.slice(0, 10) : "", 
+            start_date: data.start_date.slice(0, 10),
+            end_date: data.end_date ? data.end_date.slice(0, 10) : "",
             notes: data.notes || "",
           });
           setIsLoading(false);
@@ -65,7 +58,6 @@ const PrescriptionForm = () => {
     const url = id
       ? `http://localhost:3001/update-prescription/${id}`
       : "http://localhost:3001/save-prescription";
-
     const method = id ? "PUT" : "POST";
 
     try {
@@ -93,9 +85,50 @@ const PrescriptionForm = () => {
     return <p>Chargement...</p>;
   }
 
+  // Styles en ligne ajoutés
+  const styles = {
+    form: {
+      maxWidth: "600px", // Largeur maximale du formulaire
+      margin: "auto", // Centrer le formulaire sur la page
+      padding: "20px", // Padding interne pour espacer les éléments
+      backgroundColor: "#f9f9f9", // Fond clair
+      borderRadius: "8px", // Bordures arrondies
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)", // Ombre légère pour donner de la profondeur
+    },
+    input: {
+      width: "100%", // Prendre toute la largeur disponible
+      padding: "10px", // Padding pour améliorer l'expérience utilisateur
+      marginBottom: "10px", // Marge inférieure pour espacer les champs
+      borderRadius: "5px", // Bordures arrondies
+      border: "1px solid #ccc", // Bordure subtile
+    },
+    select: {
+      width: "100%",
+      padding: "10px",
+      marginBottom: "10px",
+      borderRadius: "5px",
+      border: "1px solid #ccc",
+    },
+    button: {
+      padding: "10px 20px",
+      borderRadius: "5px",
+      border: "none",
+      cursor: "pointer",
+      marginTop: "10px",
+    },
+    saveButton: {
+      backgroundColor: "#4CAF50", // Bouton "Sauvegarder" en vert
+      color: "#fff", // Texte blanc
+    },
+    backButton: {
+      backgroundColor: "#f44336", // Bouton "Retour" en rouge
+      color: "#fff", // Texte blanc
+    },
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>{id ? "Modifier une prescription" : "Ajouter une prescription"}</h2>
+    <form onSubmit={handleSubmit} style={styles.form}>
+      <h2>{id ? "Modifier une prescription" : "Pour ajouter une prescription"}</h2>
       <div className="form-group">
         <label>Nom du médicament</label>
         <input
@@ -103,6 +136,7 @@ const PrescriptionForm = () => {
           name="medication_name"
           value={formData.medication_name}
           onChange={handleChange}
+          style={styles.input}
           required
         />
       </div>
@@ -113,6 +147,7 @@ const PrescriptionForm = () => {
           name="dosage_quantity"
           value={formData.dosage_quantity}
           onChange={handleChange}
+          style={styles.input}
           required
         />
       </div>
@@ -122,6 +157,7 @@ const PrescriptionForm = () => {
           name="dosage_frequency"
           value={formData.dosage_frequency}
           onChange={handleChange}
+          style={styles.select}
           required
         >
           <option value="Tous les jours">Tous les jours</option>
@@ -137,12 +173,14 @@ const PrescriptionForm = () => {
             name="dosage_duration_value"
             value={formData.dosage_duration_value}
             onChange={handleChange}
+            style={styles.input}
             required
           />
           <select
             name="dosage_duration_unit"
             value={formData.dosage_duration_unit}
             onChange={handleChange}
+            style={styles.select}
             required
           >
             <option value="jours">Jours</option>
@@ -157,18 +195,20 @@ const PrescriptionForm = () => {
           name="start_date"
           value={formData.start_date}
           onChange={handleChange}
+          style={styles.input}
           required
         />
       </div>
       <div className="form-group">
-      <label>Date de fin</label>
-      <input
-        type="date"
-        name="end_date"
-        value={formData.end_date}
-        onChange={handleChange}
-      />
-        </div>
+        <label>Date de fin</label>
+        <input
+          type="date"
+          name="end_date"
+          value={formData.end_date}
+          onChange={handleChange}
+          style={styles.input}
+        />
+      </div>
       <div className="form-group">
         <label>Notes</label>
         <textarea
@@ -176,15 +216,22 @@ const PrescriptionForm = () => {
           value={formData.notes}
           onChange={handleChange}
           rows="4"
+          style={styles.input}
         />
       </div>
-{/* Boutons Sauvegarder et Retour */}
-<div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-        <button type="submit">{id ? "Modifier" : "Sauvegarder"}</button>
-        <button type="button" onClick={() => navigate("/prescriptions")}>
+      <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+        <button type="submit" style={{ ...styles.button, ...styles.saveButton }}>
+          {id ? "Modifier" : "Sauvegarder"}
+        </button>
+        <button
+          type="button"
+          onClick={() => navigate("/prescriptions")}
+          style={{ ...styles.button, ...styles.backButton }}
+        >
           Retour
         </button>
-      </div>    </form>
+      </div>
+    </form>
   );
 };
 

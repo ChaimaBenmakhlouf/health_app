@@ -15,7 +15,6 @@ const UserInfoForm = ({ initialData, onSubmit }) => {
   });
 
   useEffect(() => {
-    // Populate form with initial data if provided (edit mode)
     if (initialData) {
       setFormData({
         firstname: initialData.firstname,
@@ -39,13 +38,9 @@ const UserInfoForm = ({ initialData, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-    console.log("user email:", user.email);
-
-    // Add the email field to the formData
     const payload = {
       ...formData,
-      email: user.email
+      email: user.email,
     };
 
     const url = initialData 
@@ -74,66 +69,139 @@ const UserInfoForm = ({ initialData, onSubmit }) => {
       });
   };
 
+  // Styles en ligne pour le formulaire
+  const styles = {
+    container: {
+      maxWidth: "600px",
+      margin: "auto",
+      padding: "20px",
+      backgroundColor: "#fff",
+      borderRadius: "8px",
+      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+    },
+    header: {
+      textAlign: "center",
+      marginBottom: "20px",
+      fontSize: "1.8rem",
+      color: "#333",
+    },
+    formGroup: {
+      marginBottom: "15px",
+    },
+    label: {
+      display: "block",
+      fontWeight: "bold",
+      marginBottom: "5px",
+      color: "#555",
+    },
+    input: {
+      width: "100%",
+      padding: "10px",
+      borderRadius: "5px",
+      border: "1px solid #ccc",
+      fontSize: "1rem",
+      color: "#333",
+    },
+    select: {
+      width: "100%",
+      padding: "10px",
+      borderRadius: "5px",
+      border: "1px solid #ccc",
+      fontSize: "1rem",
+      color: "#333",
+    },
+    button: {
+      padding: "10px 20px",
+      backgroundColor: "#4CAF50",
+      color: "#fff",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      fontSize: "1.2rem",
+      marginTop: "20px",
+      width: "100%",
+    },
+    buttonDisabled: {
+      padding: "10px 20px",
+      backgroundColor: "#ccc",
+      color: "#fff",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "not-allowed",
+      fontSize: "1.2rem",
+      marginTop: "20px",
+      width: "100%",
+    },
+  };
+
   return (
-    <div>
-      <h2>{initialData ? "Edit Personal Information" : "Personal Information Form"}</h2>
+    <div style={styles.container}>
+      <h2 style={styles.header}>
+        {initialData ? "Edit Personal Information" : "Personal Information Form"}
+      </h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>First Name:</label>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>First Name:</label>
           <input
             type="text"
             name="firstname"
             value={formData.firstname}
             onChange={handleChange}
+            style={styles.input}
             required
           />
         </div>
-        <div>
-          <label>Last Name:</label>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Last Name:</label>
           <input
             type="text"
             name="lastname"
             value={formData.lastname}
             onChange={handleChange}
+            style={styles.input}
             required
           />
         </div>
-        <div>
-          <label>Age:</label>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Age:</label>
           <input
             type="number"
             name="age"
             value={formData.age}
             onChange={handleChange}
+            style={styles.input}
             required
           />
         </div>
-        <div>
-          <label>Weight (kg):</label>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Weight (kg):</label>
           <input
             type="number"
             name="poids"
             value={formData.poids}
             onChange={handleChange}
+            style={styles.input}
             required
           />
         </div>
-        <div>
-          <label>Height (cm):</label>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Height (cm):</label>
           <input
             type="number"
             name="taille"
             value={formData.taille}
             onChange={handleChange}
+            style={styles.input}
             required
           />
         </div>
-        <div>
-          <label>Rhesus:</label>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Rhesus:</label>
           <select
             name="rhesus"
             value={formData.rhesus}
             onChange={handleChange}
+            style={styles.select}
             required
           >
             <option value="">Select...</option>
@@ -141,22 +209,22 @@ const UserInfoForm = ({ initialData, onSubmit }) => {
             <option value="negative">Negative</option>
           </select>
         </div>
-        <div>
-          <label>Allergies (comma-separated):</label>
+        <div style={styles.formGroup}>
+          <label style={styles.label}>Allergies (comma-separated):</label>
           <input
             type="text"
             name="allergies"
             value={formData.allergies}
             onChange={handleChange}
+            style={styles.input}
           />
         </div>
-        <button type="submit">
+        <button type="submit" style={styles.button}>
           {initialData ? "Update Profile" : "Submit"}
         </button>
       </form>
     </div>
   );
 };
-
 
 export default UserInfoForm;

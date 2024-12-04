@@ -42,24 +42,87 @@ const PrescriptionView = () => {
 
   if (!isAuthenticated) return null;
 
+  // Styles en ligne ajoutés
+  const styles = {
+    container: {
+      maxWidth: "900px",
+      margin: "auto",
+      padding: "20px",
+      backgroundColor: "#f7f7f7",
+      borderRadius: "8px",
+      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    },
+    header: {
+      textAlign: "center",
+      marginBottom: "20px",
+      fontSize: "2rem",
+      color: "#333",
+    },
+    button: {
+      padding: "10px 20px",
+      margin: "10px 0",
+      backgroundColor: "#4CAF50",
+      color: "#fff",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      fontSize: "1rem",
+    },
+    buttonError: {
+      padding: "10px 20px",
+      margin: "10px 0",
+      backgroundColor: "#f44336",
+      color: "#fff",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      fontSize: "1rem",
+    },
+    error: {
+      color: "#f44336",
+      textAlign: "center",
+    },
+    prescriptionsList: {
+      display: "grid",
+      gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+      gap: "20px",
+      padding: "20px",
+    },
+    noPrescriptionsMessage: {
+      textAlign: "center",
+      fontSize: "1.2rem",
+      color: "#555",
+    },
+  };
+
   return (
-    <div>
-      <h1>My Prescriptions</h1>
-      <button onClick={() => navigate("/prescription/new")}>Add Prescription</button>
+    <div style={styles.container}>
+      <h1 style={styles.header}>Mes Prescriptions</h1>
+      <button onClick={() => navigate("/prescription/new")} style={styles.button}>
+        Ajouter
+      </button>
+
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
-        <p>Error: {error}</p>
+        <div style={styles.error}>
+          <p>Error: {error}</p>
+          <button style={styles.buttonError} onClick={() => fetchPrescriptions()}>
+            Réessayer
+          </button>
+        </div>
       ) : prescriptions.length === 0 ? (
-        <p>No prescriptions found.</p>
+        <p style={styles.noPrescriptionsMessage}>Pas de prescription trouvées</p>
       ) : (
-        prescriptions.map((prescription) => (
-          <PrescriptionCard
-            key={prescription.id}
-            prescription={prescription}
-            onDelete={handleDeletePrescription}
-          />
-        ))
+        <div style={styles.prescriptionsList}>
+          {prescriptions.map((prescription) => (
+            <PrescriptionCard
+              key={prescription.id}
+              prescription={prescription}
+              onDelete={handleDeletePrescription}
+            />
+          ))}
+        </div>
       )}
     </div>
   );
