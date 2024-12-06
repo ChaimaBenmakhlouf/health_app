@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHome, faUser, faTrash, faFilePdf, faPowerOff } from '@fortawesome/free-solid-svg-icons';
+
 
 import {
   Collapse,
@@ -19,6 +21,7 @@ import {
 } from "reactstrap";
 
 import { useAuth0 } from "@auth0/auth0-react";
+import { toast } from 'react-toastify';
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -78,20 +81,39 @@ const NavBar = () => {
 
   return (
     <div className="nav-container">
-      <Navbar color="light" light expand="md" container={false}>
+      <Navbar color="light" light expand="md" style={{
+          backgroundColor: "#f8f9fa", // Légère couleur de fond pour la navbar
+          padding: "10px 20px",
+          alignItems: "center",
+          boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)", // Ajout d'une légère ombre
+        }} container={false}>
         <Container>
-          <NavbarBrand className="logo" />
-          <NavbarToggler onClick={toggle} />
+          <NavbarBrand style={{
+            fontFamily: "Sixtyfour Convergence, sans-serif",
+            fontSize: "1.7rem",
+            fontWeight: "bold",
+            textTransform: "uppercase",
+            marginRight: "auto", // Aligne le logo à gauche
+            color: "#3E4677", // Couleur de texte principale pour le logo
+          }} className="logo"  MyHealthy/>
+          <NavbarToggler onClick={toggle} style={{ border: "none" }}/>
           <Collapse isOpen={isOpen} navbar>
-            <Nav className="mr-auto" navbar>
+            <Nav className="mr-auto d-flex align-items-center" navbar>
               <NavItem>
                 <NavLink
                   tag={RouterNavLink}
                   to="/"
                   exact
                   activeClassName="router-link-exact-active"
+                  style={{
+                    color: "#3E4677", // Couleur des liens de navigation
+                    fontWeight: "500",
+                    margin: "0 15px",
+                    textDecoration: "none",
+                  }}
                 >
-                  Home
+                   <FontAwesomeIcon icon={faHome} className="me-2" /> {/* Icône maison */}
+                   Accueil
                 </NavLink>
               </NavItem>
               {isAuthenticated && (
@@ -101,24 +123,19 @@ const NavBar = () => {
                     to="/prescriptions"
                     exact
                     activeClassName="router-link-exact-active"
+                    style={{
+                      color: "#3E4677", // Couleur des liens de navigation
+                      fontWeight: "500",
+                      margin: "0 15px",
+                      textDecoration: "none",
+                    }}
                   >
                     Prescriptions
                   </NavLink>
                 </NavItem>
               )}
 
-              {isAuthenticated && (
-                <NavItem>
-                  <NavLink
-                    tag={RouterNavLink}
-                    to="/external-api"
-                    exact
-                    activeClassName="router-link-exact-active"
-                  >
-                    External API
-                  </NavLink>
-                </NavItem>
-              )}
+              
               {isAuthenticated && (
                 <NavItem>
                   <NavLink
@@ -126,6 +143,12 @@ const NavBar = () => {
                     to="/forms"
                     exact
                     activeClassName="router-link-exact-active"
+                    style={{
+                      color: "#3E4677", // Couleur des liens de navigation
+                      fontWeight: "500",
+                      margin: "0 15px",
+                      textDecoration: "none",
+                    }}
                   >
                     {hasData && ("Dashboard")}
                     {!hasData && ("Formulaires")}
@@ -137,24 +160,38 @@ const NavBar = () => {
               {!isAuthenticated && (
                 <NavItem>
                   <Button
-                    id="qsLoginBtn"
-                    color="primary"
-                    className="btn-margin"
+                    style={{
+                      background: "linear-gradient(145deg, #654ea3, #eaafc8)", // Dégradé entre les couleurs demandées
+                      color: "#fff",
+                      border: "none",
+                      padding: "10px 20px", // Un peu plus d'espace pour rendre le bouton plus visible
+                      fontSize: "14px",
+                      borderRadius: "5px",
+                      boxShadow: "4px 4px 6px rgba(0, 0, 0, 0.1), -4px -4px 6px rgba(255, 255, 255, 0.3)", // Ombre pour un effet glossy
+                      transition: "all 0.3s ease-in-out", // Transition douce pour les effets au survol
+                    }}
                     onClick={() => loginWithRedirect()}
+                    onMouseEnter={(e) => {
+                      e.target.style.transform = "scale(1.05)"; // Légère augmentation de la taille au survol
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.transform = "scale(1)"; // Restauration de la taille normale
+                    }}
                   >
-                    Log in
+                    Se connecter
                   </Button>
                 </NavItem>
               )}
               {isAuthenticated && (
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret id="profileDropDown">
-                    <img
-                      src={user.picture}
-                      alt="Profile"
-                      className="nav-user-profile rounded-circle"
-                      width="50"
-                    />
+                  <img
+                    src={user.picture}
+                    alt="Profile"
+                    className="nav-user-profile rounded-circle"
+                    width="40"
+                    style={{ border: "2px solid #3E4677", marginLeft: "15px" }} // Bordure autour de l'image du profil
+                  />
                   </DropdownToggle>
                   <DropdownMenu>
                     <DropdownItem header>{user.name}</DropdownItem>
@@ -168,6 +205,8 @@ const NavBar = () => {
                     </DropdownItem>
                     <DropdownItem
                       id="qsDeleteDataBtn"
+                    
+                      style={{ color: "#e53935" }}
                       onClick={() => {
                         if (window.confirm('Êtes-vous sûr de vouloir supprimer toutes vos données ? Cette action est irréversible.')) {
                           deleteUserData();
@@ -176,6 +215,13 @@ const NavBar = () => {
                     >
                       <FontAwesomeIcon icon="trash" className="mr-3" /> Supprimer mes données
                     </DropdownItem>
+                    <DropdownItem
+                    onClick={() => alert("Export PDF triggered!")}
+                    style={{ color: "#66bb6a" }} // Couleur verte pour l'export
+                  >
+                    <FontAwesomeIcon icon={faFilePdf} className="me-2" />
+                    Exporter mes données
+                  </DropdownItem>
                     <DropdownItem
                       id="qsLogoutBtn"
                       onClick={() => logoutWithRedirect()}
@@ -187,7 +233,7 @@ const NavBar = () => {
                 </UncontrolledDropdown>
               )}
             </Nav>
-            {!isAuthenticated && (
+            {/* {!isAuthenticated && (
               <Nav className="d-md-none" navbar>
                 <NavItem>
                   <Button
@@ -200,7 +246,7 @@ const NavBar = () => {
                   </Button>
                 </NavItem>
               </Nav>
-            )}
+            )} */}
             {isAuthenticated && (
               <Nav
                 className="d-md-none justify-content-between"
