@@ -72,8 +72,16 @@ const UserInfoForm = ({ initialData, onSubmit }) => {
   // Styles en ligne pour le formulaire
   const styles = {
     container: {
+      background: "linear-gradient(90deg, #654ea3, #eaafc8)", // Fond dégradé général
+      minHeight: "100vh", // Prend toute la hauteur de la page
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: "20px",
+    },
+    formContainer: {
       maxWidth: "600px",
-      margin: "auto",
+      width: "100%",
       padding: "20px",
       backgroundColor: "#fff",
       borderRadius: "8px",
@@ -136,93 +144,95 @@ const UserInfoForm = ({ initialData, onSubmit }) => {
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.header}>
-        {initialData ? "Edit Personal Information" : "Personal Information Form"}
-      </h2>
-      <form onSubmit={handleSubmit}>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>First Name:</label>
-          <input
-            type="text"
-            name="firstname"
-            value={formData.firstname}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Last Name:</label>
-          <input
-            type="text"
-            name="lastname"
-            value={formData.lastname}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Age:</label>
-          <input
-            type="number"
-            name="age"
-            value={formData.age}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Weight (kg):</label>
-          <input
-            type="number"
-            name="poids"
-            value={formData.poids}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Height (cm):</label>
-          <input
-            type="number"
-            name="taille"
-            value={formData.taille}
-            onChange={handleChange}
-            style={styles.input}
-            required
-          />
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Rhesus:</label>
-          <select
-            name="rhesus"
-            value={formData.rhesus}
-            onChange={handleChange}
-            style={styles.select}
-            required
-          >
-            <option value="">Select...</option>
-            <option value="positive">Positive</option>
-            <option value="negative">Negative</option>
-          </select>
-        </div>
-        <div style={styles.formGroup}>
-          <label style={styles.label}>Allergies (comma-separated):</label>
-          <input
-            type="text"
-            name="allergies"
-            value={formData.allergies}
-            onChange={handleChange}
-            style={styles.input}
-          />
-        </div>
-        <button type="submit" style={styles.button}>
-          {initialData ? "Update Profile" : "Submit"}
-        </button>
-      </form>
+      <div style={styles.formContainer}>
+        <h2 style={styles.header}>
+          {initialData ? "Edit Personal Information" : "Personal Information Form"}
+        </h2>
+        <form onSubmit={handleSubmit}>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>First Name:</label>
+            <input
+              type="text"
+              name="firstname"
+              value={formData.firstname}
+              onChange={handleChange}
+              style={styles.input}
+              required
+            />
+          </div>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Last Name:</label>
+            <input
+              type="text"
+              name="lastname"
+              value={formData.lastname}
+              onChange={handleChange}
+              style={styles.input}
+              required
+            />
+          </div>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Age:</label>
+            <input
+              type="number"
+              name="age"
+              value={formData.age}
+              onChange={handleChange}
+              style={styles.input}
+              required
+            />
+          </div>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Weight (kg):</label>
+            <input
+              type="number"
+              name="poids"
+              value={formData.poids}
+              onChange={handleChange}
+              style={styles.input}
+              required
+            />
+          </div>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Height (cm):</label>
+            <input
+              type="number"
+              name="taille"
+              value={formData.taille}
+              onChange={handleChange}
+              style={styles.input}
+              required
+            />
+          </div>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Rhesus:</label>
+            <select
+              name="rhesus"
+              value={formData.rhesus}
+              onChange={handleChange}
+              style={styles.select}
+              required
+            >
+              <option value="">Select...</option>
+              <option value="positive">Positive</option>
+              <option value="negative">Negative</option>
+            </select>
+          </div>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Allergies (comma-separated):</label>
+            <input
+              type="text"
+              name="allergies"
+              value={formData.allergies}
+              onChange={handleChange}
+              style={styles.input}
+            />
+          </div>
+          <button type="submit" style={styles.button}>
+            {initialData ? "Update Profile" : "Submit"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
